@@ -1,15 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MainHeader from '@/components/MainHeader.vue'
+</script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <p class="mt-40">test</p>
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="w-4/5 h-screen m-auto mt-14 bg-white rounded-xl shadow-xl">
+    <MainHeader />
+  </div>
 </template>
 
 <style scoped></style>

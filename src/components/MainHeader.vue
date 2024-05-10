@@ -3,10 +3,10 @@
     <div class="flex items-center gap-4">
       <img class="w-10" src="/logo.png" alt="Логотип магазина" />
 
-      <P class="inline-flex flex-col text-xl font-bold uppercase">
+      <p class="inline-flex flex-col text-xl font-bold uppercase">
         Vue Sneakers
         <span class="font-normal text-sm normal-case text-slate-400">Магазин лучших кросовок</span>
-      </P>
+      </p>
     </div>
 
     <nav>

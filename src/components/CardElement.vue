@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <div
+  <li
     class="relative bg-white p-8 border border-slate-100 rounded-3xl hover:-translate-y-2 hover:shadow-xl transition"
   >
     <button @click="onFavoriteClick" class="absolute top-8 left-8">
@@ -32,5 +32,5 @@ defineProps({
         <img :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="Add item to cart icon" />
       </button>
     </div>
-  </div>
+  </li>
 </template>

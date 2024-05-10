@@ -3,7 +3,7 @@ import CardElement from './CardElement.vue'
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-5">
+  <ul class="grid grid-cols-4 gap-5">
     <CardElement
       image-url="/sneakers/sneakers-1.jpg"
       title="Мужские Кроссовки Nike Blazer Mid Suede"
@@ -13,5 +13,5 @@ import CardElement from './CardElement.vue'
       :on-favorite-click="() => console.log('favorite test click')"
       :on-add-click="() => console.log('add test click')"
     />
-  </div>
+  </ul>
 </template>

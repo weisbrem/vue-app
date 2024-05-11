@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import CardElement from './CardElement.vue'
-import { ISneakersItem } from '@/types/sneakers.types'
+import CardElement from './CardElement.vue';
+import { ISneakersItem } from '@/types/sneakers.types';
 
 defineProps({
-  items: Array<ISneakersItem>
-})
+  items: Array<ISneakersItem>,
+});
 
-const emit = defineEmits(['onAddToFavorite'])
+const emit = defineEmits(['onAddToFavorite']);
 </script>
 
 <template>

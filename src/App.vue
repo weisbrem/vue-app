@@ -1,121 +1,121 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
-import axios from 'axios'
+import { onMounted, reactive, ref, watch } from 'vue';
+import axios from 'axios';
 
-import MainHeader from '@/components/MainHeader.vue'
-import CardElementList from '@/components/CardElementList.vue'
+import MainHeader from '@/components/MainHeader.vue';
+import CardElementList from '@/components/CardElementList.vue';
 // import MainDrawer from '@/components/MainDrawer.vue'
 
 // import MainDrawer from '@/components/MainDrawer.vue'
-import type { ISneakersItem } from '@/types/sneakers.types'
-import type { ISearchParams } from '@/types/searchParams.types'
-import { API_ROUTES } from '@/constants/api'
+import type { ISneakersItem } from '@/types/sneakers.types';
+import type { ISearchParams } from '@/types/searchParams.types';
+import { API_ROUTES } from '@/constants/api';
 
-const items = ref<ISneakersItem[]>([])
+const items = ref<ISneakersItem[]>([]);
 const filters = reactive({
   sortBy: 'title',
-  searchQuery: ''
-})
+  searchQuery: '',
+});
 
 const onSelectChange = (evt: Event) => {
-  const { value } = evt.target as HTMLSelectElement
+  const { value } = evt.target as HTMLSelectElement;
 
-  filters.sortBy = value
-}
+  filters.sortBy = value;
+};
 
 const onChangeSearchInput = (evt: Event) => {
-  const { value } = evt.target as HTMLInputElement
+  const { value } = evt.target as HTMLInputElement;
 
-  filters.searchQuery = value
-}
+  filters.searchQuery = value;
+};
 
 const onAddToFavorite = async (item: ISneakersItem) => {
   try {
     if (!item.isFavorite) {
       const updatedItem = {
-        productId: item.id
-      }
+        productId: item.id,
+      };
 
-      item.isFavorite = true
+      item.isFavorite = true;
 
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`,
-        updatedItem
-      )
+        updatedItem,
+      );
 
-      item.favoriteId = data.id
+      item.favoriteId = data.id;
 
-      return
+      return;
     }
 
-    item.isFavorite = false
+    item.isFavorite = false;
 
-    await axios.delete(`${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}/${item.favoriteId}`)
+    await axios.delete(`${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}/${item.favoriteId}`);
 
-    item.favoriteId = null
+    item.favoriteId = null;
   } catch (error) {
-    console.log('App. Add to favorite', error)
+    console.log('App. Add to favorite', error);
   }
-}
+};
 
 const getFavorites = async () => {
   try {
     const { data } = await axios.get<ISneakersItem[]>(
-      `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`
-    )
+      `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`,
+    );
 
     items.value = items.value.map((item) => {
-      const favorite = data.find((favoriteItem) => favoriteItem.productId === item.id)
+      const favorite = data.find((favoriteItem) => favoriteItem.productId === item.id);
 
       if (!favorite) {
-        return item
+        return item;
       }
 
       return {
         ...item,
         isFavorite: true,
-        favoriteId: favorite.id
-      }
-    })
+        favoriteId: favorite.id,
+      };
+    });
   } catch (error) {
-    console.log('App', error)
+    console.log('App', error);
   }
-}
+};
 
 const getSneakers = async () => {
   const params: ISearchParams = {
-    sortBy: filters.sortBy
-  }
+    sortBy: filters.sortBy,
+  };
 
   if (filters.searchQuery) {
-    params.title = `*${filters.searchQuery}*`
+    params.title = `*${filters.searchQuery}*`;
   }
 
   try {
     const { data } = await axios.get<ISneakersItem[]>(
       `${import.meta.env.VITE_API_URL}${API_ROUTES.sneakers}`,
       {
-        params
-      }
-    )
+        params,
+      },
+    );
 
     items.value = data.map((item) => ({
       ...item,
       isFavorite: false,
       isAdded: false,
-      favoriteId: null
-    }))
+      favoriteId: null,
+    }));
   } catch (error) {
-    console.log('App', error)
+    console.log('App', error);
   }
-}
+};
 
 onMounted(async () => {
-  await getSneakers()
-  await getFavorites()
-})
+  await getSneakers();
+  await getFavorites();
+});
 
-watch(filters, getSneakers)
+watch(filters, getSneakers);
 </script>
 
 <template>

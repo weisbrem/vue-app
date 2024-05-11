@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import CardElement from './CardElement.vue'
-import { ISneakersItem } from '@/types'
+import { ISneakersItem } from '@/types/sneakers.types'
 
 defineProps({
   items: Array<ISneakersItem>
 })
+
+const emit = defineEmits(['onAddToFavorite'])
 </script>
 
 <template>
   <ul class="grid grid-cols-4 gap-5">
     <CardElement
-      v-for="{ title, price, imageUrl, id, isFavorite, isAdded } in items"
-      :key="id"
-      :image-url="imageUrl"
-      :title="title"
-      :price="price"
-      :is-favorite="isFavorite"
-      :is-added="isAdded"
-      :on-favorite-click="() => console.log('favorite test click')"
+      v-for="item in items"
+      :key="item.id"
+      :image-url="item.imageUrl"
+      :title="item.title"
+      :price="item.price"
+      :is-favorite="item.isFavorite"
+      :is-added="item.isAdded"
+      :on-favorite-click="() => emit('onAddToFavorite', item)"
       :on-add-click="() => console.log('add test click')"
     />
   </ul>

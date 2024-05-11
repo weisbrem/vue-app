@@ -29,6 +29,59 @@ const onChangeSearchInput = (evt: Event) => {
   filters.searchQuery = value
 }
 
+const onAddToFavorite = async (item: ISneakersItem) => {
+  try {
+    if (!item.isFavorite) {
+      const updatedItem = {
+        productId: item.id
+      }
+
+      item.isFavorite = true
+
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`,
+        updatedItem
+      )
+
+      item.favoriteId = data.id
+
+      return
+    }
+
+    item.isFavorite = false
+
+    await axios.delete(`${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}/${item.favoriteId}`)
+
+    item.favoriteId = null
+  } catch (error) {
+    console.log('App. Add to favorite', error)
+  }
+}
+
+const getFavorites = async () => {
+  try {
+    const { data } = await axios.get<ISneakersItem[]>(
+      `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`
+    )
+
+    items.value = items.value.map((item) => {
+      const favorite = data.find((favoriteItem) => favoriteItem.productId === item.id)
+
+      if (!favorite) {
+        return item
+      }
+
+      return {
+        ...item,
+        isFavorite: true,
+        favoriteId: favorite.id
+      }
+    })
+  } catch (error) {
+    console.log('App', error)
+  }
+}
+
 const getSneakers = async () => {
   const params: ISearchParams = {
     sortBy: filters.sortBy
@@ -39,17 +92,28 @@ const getSneakers = async () => {
   }
 
   try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}${API_ROUTES.getSneakers}`, {
-      params
-    })
+    const { data } = await axios.get<ISneakersItem[]>(
+      `${import.meta.env.VITE_API_URL}${API_ROUTES.sneakers}`,
+      {
+        params
+      }
+    )
 
-    items.value = data
+    items.value = data.map((item) => ({
+      ...item,
+      isFavorite: false,
+      isAdded: false,
+      favoriteId: null
+    }))
   } catch (error) {
     console.log('App', error)
   }
 }
 
-onMounted(getSneakers)
+onMounted(async () => {
+  await getSneakers()
+  await getFavorites()
+})
 
 watch(filters, getSneakers)
 </script>
@@ -84,7 +148,7 @@ watch(filters, getSneakers)
         </div>
       </div>
 
-      <CardElementList :items="items" />
+      <CardElementList :items="items" @on-add-to-favorite="onAddToFavorite" />
     </div>
   </div>
 </template>

@@ -1,3 +1,4 @@
 export const API_ROUTES = {
-  getSneakers: '/items'
+  sneakers: '/items',
+  favorites: '/favorites'
 }

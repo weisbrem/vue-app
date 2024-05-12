@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, onMounted, watch, ref, inject } from 'vue';
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 
 import CardElementList from '@/components/CardElementList.vue';
 
@@ -24,11 +25,11 @@ const onSelectChange = (evt: Event) => {
   filters.sortBy = value;
 };
 
-const onChangeSearchInput = (evt: Event) => {
+const onChangeSearchInput = debounce((evt: Event) => {
   const { value } = evt.target as HTMLInputElement;
 
   filters.searchQuery = value;
-};
+}, 300);
 
 const onAddToCart = (item: ISneakersItem) => {
   if (!item.isAdded) {

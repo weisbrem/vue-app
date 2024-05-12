@@ -1,18 +1,38 @@
-<script setup>
-import { inject } from 'vue';
+<script setup lang="ts">
+import { inject, ref, computed } from 'vue';
+import axios from 'axios';
+
 import DrawerHead from '@/components/DrawerHead.vue';
 import CartElementList from '@/components/CartElementList.vue';
 import InfoBlock from '@/components/InfoBlock.vue';
 
-const { onCloseDrawer } = inject('cart');
+import { API_ROUTES } from '@/constants/api';
 
-defineProps({
+const { totalCartPrice } = defineProps({
   totalCartPrice: Number,
-  vatPrice: Number,
-  isCreatingOrder: Boolean,
 });
+const { onCloseDrawer, itemsInCart } = inject('cart');
 
-const emit = defineEmits(['createOrder']);
+const isCreatingOrder = ref<boolean>(false);
+const orderId = ref<number | null>(null);
+const vatPrice = computed(() => Math.round(totalCartPrice * 0.05));
+
+const onCreateOrder = async () => {
+  try {
+    isCreatingOrder.value = true;
+    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}${API_ROUTES.orders}`, {
+      items: itemsInCart.value,
+      totalPrice: totalCartPrice,
+    });
+
+    itemsInCart.value = [];
+    orderId.value = data.id;
+  } catch (error) {
+    console.log('Drawer. Create order', error);
+  } finally {
+    isCreatingOrder.value = false;
+  }
+};
 </script>
 
 <template>
@@ -24,8 +44,16 @@ const emit = defineEmits(['createOrder']);
   <div class="fixed right-0 top-0 z-20 flex gap-8 flex-col bg-white h-screen w-96 p-8">
     <DrawerHead />
 
-    <div class="flex items-center h-full" v-if="!totalCartPrice">
+    <div class="flex items-center h-full" v-if="!totalCartPrice || orderId">
       <InfoBlock
+        v-if="orderId"
+        imageUrl="/order-success-icon.png"
+        title="Заказ оформлен!"
+        :description="`Ваш заказ #${orderId} скоро будет передан курьерской доставке`"
+      />
+
+      <InfoBlock
+        v-if="!totalCartPrice && !orderId"
         imageUrl="/package-icon.png"
         title="Корзина пустая"
         description="Добавьте хотя бы одну пару кроссовок, чтобы оформить заказ"
@@ -48,7 +76,7 @@ const emit = defineEmits(['createOrder']);
       </div>
 
       <button
-        @click="emit('createOrder')"
+        @click="onCreateOrder"
         :disabled="isCreatingOrder"
         class="w-full py-3 bg-lime-500 rounded-2xl text-white hover:bg-lime-600 active:bg-lime-700 disabled:bg-slate-300 transition"
       >

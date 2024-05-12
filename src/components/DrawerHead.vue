@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue';
 
-const { onCloseDrawer } = inject('cartActions');
+const { onCloseDrawer } = inject('cart');
 </script>
 
 <template>

@@ -1,20 +1,19 @@
 <script setup>
+import { inject } from 'vue';
 import CartElement from './CartElement.vue';
+
+const { itemsInCart, handleRemoveFromCart } = inject('cart');
 </script>
 
 <template>
   <ul class="flex flex-col flex-1 gap-4">
     <CartElement
-      image-url="/sneakers/sneakers-1.jpg"
-      title="Мужские Кроссовки Nike Blazer Mid Suede"
-      :price="12999"
-      :on-remove-item-click="() => console.log('remove test click')"
-    />
-    <CartElement
-      image-url="/sneakers/sneakers-1.jpg"
-      title="Мужские Кроссовки Nike Blazer Mid Suede"
-      :price="12999"
-      :on-remove-item-click="() => console.log('remove test click')"
+      v-for="item in itemsInCart"
+      :key="item.id"
+      :image-url="item.imageUrl"
+      :title="item.title"
+      :price="item.price"
+      @on-remove-item-click="() => handleRemoveFromCart(item)"
     />
   </ul>
 </template>

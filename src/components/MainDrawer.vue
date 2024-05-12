@@ -3,7 +3,7 @@ import { inject } from 'vue';
 import DrawerHead from './DrawerHead.vue';
 import CartElementList from './CartElementList.vue';
 
-const { onCloseDrawer } = inject('cartActions');
+const { onCloseDrawer } = inject('cart');
 </script>
 
 <template>

@@ -11,7 +11,10 @@ import type { ISearchParams } from '@/types/searchParams.types';
 import { API_ROUTES } from '@/constants/api';
 
 const isDrawerOpen = ref<boolean>(false);
+
 const items = ref<ISneakersItem[]>([]);
+const itemsInCart = ref<ISneakersItem[]>([]);
+
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
@@ -34,6 +37,31 @@ const onChangeSearchInput = (evt: Event) => {
   const { value } = evt.target as HTMLInputElement;
 
   filters.searchQuery = value;
+};
+
+const handleAddToCart = (item: ISneakersItem) => {
+  if (!item.isAdded) {
+    itemsInCart.value.push(item);
+    item.isAdded = true;
+    return;
+  }
+
+  itemsInCart.value.splice(itemsInCart.value.indexOf(item), 1);
+  item.isAdded = false;
+};
+
+const handleRemoveFromCart = (item: ISneakersItem) => {
+  itemsInCart.value.splice(itemsInCart.value.indexOf(item), 1);
+  item.isAdded = false;
+};
+
+const onAddToCart = (item: ISneakersItem) => {
+  if (!item.isAdded) {
+    handleAddToCart(item);
+    return;
+  }
+
+  handleRemoveFromCart(item);
 };
 
 const onAddToFavorite = async (item: ISneakersItem) => {
@@ -124,9 +152,11 @@ onMounted(async () => {
 
 watch(filters, getSneakers);
 
-provide('cartActions', {
+provide('cart', {
   onCloseDrawer,
   onOpenDrawer,
+  itemsInCart,
+  handleRemoveFromCart,
 });
 </script>
 
@@ -159,7 +189,11 @@ provide('cartActions', {
         </div>
       </div>
 
-      <CardElementList :items="items" @on-add-to-favorite="onAddToFavorite" />
+      <CardElementList
+        :items="items"
+        @on-add-to-cart="onAddToCart"
+        @on-add-to-favorite="onAddToFavorite"
+      />
     </div>
   </div>
 </template>

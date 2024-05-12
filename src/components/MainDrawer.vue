@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { inject, ref, computed } from 'vue';
 import axios from 'axios';
 
@@ -13,8 +13,8 @@ const { totalCartPrice } = defineProps({
 });
 const { onCloseDrawer, itemsInCart } = inject('cart');
 
-const isCreatingOrder = ref<boolean>(false);
-const orderId = ref<number | null>(null);
+const isCreatingOrder = ref(false);
+const orderId = ref(null);
 const vatPrice = computed(() => Math.round(totalCartPrice * 0.05));
 
 const onCreateOrder = async () => {

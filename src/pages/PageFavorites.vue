@@ -1,18 +1,17 @@
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 import InfoBlock from '../components/InfoBlock.vue';
 
-import type { ISneakersItem, IFavoriteItem } from '../types/sneakers.types';
 import { API_ROUTES } from '../constants/api';
 import CardElementList from '../components/CardElementList.vue';
 
-const favorites = ref<ISneakersItem[]>([]);
+const favorites = ref([]);
 
 const getFavorites = async () => {
   try {
-    const { data } = await axios.get<IFavoriteItem[]>(
+    const { data } = await axios.get(
       `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}?_relations=items`,
     );
 

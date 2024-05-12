@@ -1,9 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import CardElement from './CardElement.vue';
-import type { ISneakersItem } from '../types/sneakers.types';
 
 const props = defineProps({
-  items: Array<ISneakersItem>,
+  items: Array,
   isFavorites: Boolean,
 });
 

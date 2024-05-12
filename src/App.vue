@@ -1,14 +1,12 @@
-<script setup lang="ts">
+<script setup>
 import { computed, provide, ref, watch } from 'vue';
 
 import MainHeader from './components/MainHeader.vue';
 import MainDrawer from './components/MainDrawer.vue';
 
-import type { ISneakersItem } from './types/sneakers.types';
+const isDrawerOpen = ref(false);
 
-const isDrawerOpen = ref<boolean>(false);
-
-const itemsInCart = ref<ISneakersItem[]>([]);
+const itemsInCart = ref([]);
 
 const totalCartPrice = computed(() => itemsInCart.value.reduce((acc, item) => acc + item.price, 0));
 
@@ -21,7 +19,7 @@ const onOpenDrawer = () => {
   document.documentElement.style.overflow = 'hidden';
 };
 
-const handleAddToCart = (item: ISneakersItem) => {
+const handleAddToCart = (item) => {
   if (!item.isAdded) {
     itemsInCart.value.push(item);
     item.isAdded = true;
@@ -32,7 +30,7 @@ const handleAddToCart = (item: ISneakersItem) => {
   item.isAdded = false;
 };
 
-const handleRemoveFromCart = (item: ISneakersItem) => {
+const handleRemoveFromCart = (item) => {
   itemsInCart.value.splice(itemsInCart.value.indexOf(item), 1);
   item.isAdded = false;
 };

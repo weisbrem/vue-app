@@ -1,37 +1,34 @@
-<script setup lang="ts">
+<script setup>
 import { reactive, onMounted, watch, ref, inject } from 'vue';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 
 import CardElementList from '../components/CardElementList.vue';
 
-import type { ISneakersItem } from '../types/sneakers.types';
-import type { ISearchParams } from '../types/searchParams.types';
-import type { ICartProvide } from '../types/provide.types';
 import { API_ROUTES } from '../constants/api';
 
-const { itemsInCart, handleAddToCart, handleRemoveFromCart } = inject('cart') as ICartProvide;
+const { itemsInCart, handleAddToCart, handleRemoveFromCart } = inject('cart');
 
-const items = ref<ISneakersItem[]>([]);
+const items = ref([]);
 
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
 });
 
-const onSelectChange = (evt: Event) => {
-  const { value } = evt.target as HTMLSelectElement;
+const onSelectChange = (evt) => {
+  const { value } = evt.target;
 
   filters.sortBy = value;
 };
 
-const onChangeSearchInput = debounce((evt: Event) => {
-  const { value } = evt.target as HTMLInputElement;
+const onChangeSearchInput = debounce((evt) => {
+  const { value } = evt.target;
 
   filters.searchQuery = value;
 }, 300);
 
-const onAddToCart = (item: ISneakersItem) => {
+const onAddToCart = (item) => {
   if (!item.isAdded) {
     handleAddToCart(item);
     return;
@@ -40,7 +37,7 @@ const onAddToCart = (item: ISneakersItem) => {
   handleRemoveFromCart(item);
 };
 
-const onAddToFavorite = async (item: ISneakersItem) => {
+const onAddToFavorite = async (item) => {
   try {
     if (!item.isFavorite) {
       const updatedItem = {
@@ -71,9 +68,7 @@ const onAddToFavorite = async (item: ISneakersItem) => {
 
 const getFavorites = async () => {
   try {
-    const { data } = await axios.get<ISneakersItem[]>(
-      `${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`,
-    );
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}${API_ROUTES.favorites}`);
 
     items.value = items.value.map((item) => {
       const favorite = data.find((favoriteItem) => favoriteItem.item_id === item.id);
@@ -94,7 +89,7 @@ const getFavorites = async () => {
 };
 
 const getSneakers = async () => {
-  const params: ISearchParams = {
+  const params = {
     sortBy: filters.sortBy,
   };
 
@@ -103,12 +98,9 @@ const getSneakers = async () => {
   }
 
   try {
-    const { data } = await axios.get<ISneakersItem[]>(
-      `${import.meta.env.VITE_API_URL}${API_ROUTES.sneakers}`,
-      {
-        params,
-      },
-    );
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}${API_ROUTES.sneakers}`, {
+      params,
+    });
 
     items.value = data.map((item) => ({
       ...item,
@@ -130,7 +122,7 @@ onMounted(async () => {
 
   items.value = items.value.map((item) => ({
     ...item,
-    isAdded: itemsInCart.value.some((cartItem: ISneakersItem) => cartItem.id === item.id),
+    isAdded: itemsInCart.value.some((cartItem) => cartItem.id === item.id),
   }));
 });
 

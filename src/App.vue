@@ -1,21 +1,16 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue';
-import axios from 'axios';
 
 import MainHeader from '@/components/MainHeader.vue';
 import MainDrawer from '@/components/MainDrawer.vue';
-import PageHome from '@/pages/PageHome.vue';
 
 import type { ISneakersItem } from '@/types/sneakers.types';
-import { API_ROUTES } from '@/constants/api';
 
 const isDrawerOpen = ref<boolean>(false);
-const isCreatingOrder = ref<boolean>(false);
 
 const itemsInCart = ref<ISneakersItem[]>([]);
 
 const totalCartPrice = computed(() => itemsInCart.value.reduce((acc, item) => acc + item.price, 0));
-const vatPrice = computed(() => Math.round(totalCartPrice.value * 0.05));
 
 const onCloseDrawer = () => {
   isDrawerOpen.value = false;
@@ -42,22 +37,6 @@ const handleRemoveFromCart = (item: ISneakersItem) => {
   item.isAdded = false;
 };
 
-const createOrder = async () => {
-  try {
-    isCreatingOrder.value = true;
-    await axios.post(`${import.meta.env.VITE_API_URL}${API_ROUTES.orders}`, {
-      items: itemsInCart.value,
-      totalPrice: totalCartPrice.value,
-    });
-
-    itemsInCart.value = [];
-  } catch (error) {
-    console.log('App. Create order', error);
-  } finally {
-    isCreatingOrder.value = false;
-  }
-};
-
 watch(
   itemsInCart,
   () => {
@@ -78,13 +57,7 @@ provide('cart', {
 </script>
 
 <template>
-  <MainDrawer
-    v-if="isDrawerOpen"
-    :total-cart-price="totalCartPrice"
-    :vat-price="vatPrice"
-    :is-creating-order="isCreatingOrder"
-    @create-order="createOrder"
-  />
+  <MainDrawer v-if="isDrawerOpen" :total-cart-price="totalCartPrice" />
 
   <div class="w-4/5 m-auto mt-14 bg-white rounded-xl shadow-xl">
     <MainHeader :total-cart-price="totalCartPrice" @on-open-drawer="onOpenDrawer" />

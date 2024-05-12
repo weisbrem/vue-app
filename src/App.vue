@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, provide, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 
 import MainHeader from '@/components/MainHeader.vue';
 import CardElementList from '@/components/CardElementList.vue';
-// import MainDrawer from '@/components/MainDrawer.vue'
+import MainDrawer from '@/components/MainDrawer.vue';
 
-// import MainDrawer from '@/components/MainDrawer.vue'
 import type { ISneakersItem } from '@/types/sneakers.types';
 import type { ISearchParams } from '@/types/searchParams.types';
 import { API_ROUTES } from '@/constants/api';
 
+const isDrawerOpen = ref<boolean>(false);
 const items = ref<ISneakersItem[]>([]);
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
 });
+
+const onCloseDrawer = () => {
+  isDrawerOpen.value = false;
+};
+const onOpenDrawer = () => {
+  isDrawerOpen.value = true;
+};
 
 const onSelectChange = (evt: Event) => {
   const { value } = evt.target as HTMLSelectElement;
@@ -116,14 +123,18 @@ onMounted(async () => {
 });
 
 watch(filters, getSneakers);
+
+provide('cartActions', {
+  onCloseDrawer,
+  onOpenDrawer,
+});
 </script>
 
 <template>
-  <!-- TODO: return when open drawer functional will be ready -->
-  <!-- <MainDrawer /> -->
+  <MainDrawer v-if="isDrawerOpen" />
 
   <div class="w-4/5 m-auto mt-14 bg-white rounded-xl shadow-xl">
-    <MainHeader />
+    <MainHeader @on-open-drawer="onOpenDrawer" />
 
     <div class="p-10">
       <div class="flex justify-between mb-8">

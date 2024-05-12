@@ -1,6 +1,12 @@
+<script setup>
+import { inject } from 'vue';
+
+const { onCloseDrawer } = inject('cartActions');
+</script>
+
 <template>
   <div class="flex items-center gap-5">
-    <button class="w-4 h-4 group">
+    <button @click="onCloseDrawer" class="w-4 h-4 group">
       <svg
         class="opacity-30 rotate-180 group-hover:opacity-100 transition group-hover:-translate-x-1"
         width="16"

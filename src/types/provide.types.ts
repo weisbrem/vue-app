@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import type { ISneakersItem } from '@/types/sneakers.types';
+import type { ISneakersItem } from './sneakers.types';
 
 export interface ICartProvide {
   onCloseDrawer: () => void;

@@ -2,11 +2,11 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-import InfoBlock from '@/components/InfoBlock.vue';
+import InfoBlock from '../components/InfoBlock.vue';
 
-import type { ISneakersItem, IFavoriteItem } from '@/types/sneakers.types';
-import { API_ROUTES } from '@/constants/api';
-import CardElementList from '@/components/CardElementList.vue';
+import type { ISneakersItem, IFavoriteItem } from '../types/sneakers.types';
+import { API_ROUTES } from '../constants/api';
+import CardElementList from '../components/CardElementList.vue';
 
 const favorites = ref<ISneakersItem[]>([]);
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CardElement from '@/components/CardElement.vue';
-import type { ISneakersItem } from '@/types/sneakers.types';
+import CardElement from './CardElement.vue';
+import type { ISneakersItem } from '../types/sneakers.types';
 
 const props = defineProps({
   items: Array<ISneakersItem>,

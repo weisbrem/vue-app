@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue';
 
-import MainHeader from '@/components/MainHeader.vue';
-import MainDrawer from '@/components/MainDrawer.vue';
+import MainHeader from './components/MainHeader.vue';
+import MainDrawer from './components/MainDrawer.vue';
 
-import type { ISneakersItem } from '@/types/sneakers.types';
+import type { ISneakersItem } from './types/sneakers.types';
 
 const isDrawerOpen = ref<boolean>(false);
 

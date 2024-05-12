@@ -2,11 +2,11 @@
 import { inject, ref, computed } from 'vue';
 import axios from 'axios';
 
-import DrawerHead from '@/components/DrawerHead.vue';
-import CartElementList from '@/components/CartElementList.vue';
-import InfoBlock from '@/components/InfoBlock.vue';
+import DrawerHead from './DrawerHead.vue';
+import CartElementList from './CartElementList.vue';
+import InfoBlock from './InfoBlock.vue';
 
-import { API_ROUTES } from '@/constants/api';
+import { API_ROUTES } from '../constants/api';
 
 const { totalCartPrice } = defineProps({
   totalCartPrice: Number,

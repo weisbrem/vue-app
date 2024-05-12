@@ -3,12 +3,12 @@ import { reactive, onMounted, watch, ref, inject } from 'vue';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 
-import CardElementList from '@/components/CardElementList.vue';
+import CardElementList from '../components/CardElementList.vue';
 
-import type { ISneakersItem } from '@/types/sneakers.types';
-import type { ISearchParams } from '@/types/searchParams.types';
-import type { ICartProvide } from '@/types/provide.types';
-import { API_ROUTES } from '@/constants/api';
+import type { ISneakersItem } from '../types/sneakers.types';
+import type { ISearchParams } from '../types/searchParams.types';
+import type { ICartProvide } from '../types/provide.types';
+import { API_ROUTES } from '../constants/api';
 
 const { itemsInCart, handleAddToCart, handleRemoveFromCart } = inject('cart') as ICartProvide;
 

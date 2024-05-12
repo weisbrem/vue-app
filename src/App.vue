@@ -11,6 +11,7 @@ import type { ISearchParams } from '@/types/searchParams.types';
 import { API_ROUTES } from '@/constants/api';
 
 const isDrawerOpen = ref<boolean>(false);
+const isCreatingOrder = ref<boolean>(false);
 
 const items = ref<ISneakersItem[]>([]);
 const itemsInCart = ref<ISneakersItem[]>([]);
@@ -67,6 +68,22 @@ const onAddToCart = (item: ISneakersItem) => {
   }
 
   handleRemoveFromCart(item);
+};
+
+const createOrder = async () => {
+  try {
+    isCreatingOrder.value = true;
+    await axios.post(`${import.meta.env.VITE_API_URL}${API_ROUTES.orders}`, {
+      items: itemsInCart.value,
+      totalPrice: totalCartPrice.value,
+    });
+
+    itemsInCart.value = [];
+  } catch (error) {
+    console.log('App. Create order', error);
+  } finally {
+    isCreatingOrder.value = false;
+  }
 };
 
 const onAddToFavorite = async (item: ISneakersItem) => {
@@ -151,11 +168,36 @@ const getSneakers = async () => {
 };
 
 onMounted(async () => {
+  const LSItemsInCart = localStorage.getItem('itemsInCart');
+  itemsInCart.value = LSItemsInCart ? JSON.parse(LSItemsInCart) : [];
+
   await getSneakers();
   await getFavorites();
+
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: itemsInCart.value.some((cartItem: ISneakersItem) => cartItem.id === item.id),
+  }));
 });
 
 watch(filters, getSneakers);
+
+watch(itemsInCart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: false,
+  }));
+});
+
+watch(
+  itemsInCart,
+  () => {
+    localStorage.setItem('itemsInCart', JSON.stringify(itemsInCart.value));
+  },
+  {
+    deep: true,
+  },
+);
 
 provide('cart', {
   onCloseDrawer,
@@ -166,7 +208,13 @@ provide('cart', {
 </script>
 
 <template>
-  <MainDrawer :total-cart-price="totalCartPrice" :vat-price="vatPrice" v-if="isDrawerOpen" />
+  <MainDrawer
+    v-if="isDrawerOpen"
+    :total-cart-price="totalCartPrice"
+    :vat-price="vatPrice"
+    :is-creating-order="isCreatingOrder"
+    @create-order="createOrder"
+  />
 
   <div class="w-4/5 m-auto mt-14 bg-white rounded-xl shadow-xl">
     <MainHeader :total-cart-price="totalCartPrice" @on-open-drawer="onOpenDrawer" />

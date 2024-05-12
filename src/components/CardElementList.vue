@@ -2,8 +2,9 @@
 import CardElement from '@/components/CardElement.vue';
 import type { ISneakersItem } from '@/types/sneakers.types';
 
-defineProps({
+const props = defineProps({
   items: Array<ISneakersItem>,
+  isFavorites: Boolean,
 });
 
 const emit = defineEmits(['onAddToFavorite', 'onAddToCart']);
@@ -19,8 +20,8 @@ const emit = defineEmits(['onAddToFavorite', 'onAddToCart']);
       :price="item.price"
       :is-favorite="item.isFavorite"
       :is-added="item.isAdded"
-      :on-favorite-click="() => emit('onAddToFavorite', item)"
-      :on-add-click="() => emit('onAddToCart', item)"
+      :on-favorite-click="isFavorites ? null : () => emit('onAddToFavorite', item)"
+      :on-add-click="isFavorites ? null : () => emit('onAddToCart', item)"
     />
   </ul>
 </template>

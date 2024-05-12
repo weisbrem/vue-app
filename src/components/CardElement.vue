@@ -14,7 +14,7 @@ defineProps({
   <li
     class="relative bg-white p-8 border border-slate-100 rounded-3xl hover:-translate-y-2 hover:shadow-xl transition"
   >
-    <button @click="onFavoriteClick" class="absolute top-8 left-8">
+    <button v-if="onFavoriteClick" @click="onFavoriteClick" class="absolute top-8 left-8">
       <img :src="isFavorite ? '/like-2.svg' : '/like-1.svg'" alt="Like icon" />
     </button>
 
@@ -28,7 +28,7 @@ defineProps({
         <span class="font-bold">{{ price }} руб.</span>
       </div>
 
-      <button @click="onAddClick">
+      <button v-if="onAddClick" @click="onAddClick">
         <img :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="Add item to cart icon" />
       </button>
     </div>

@@ -43,7 +43,7 @@ const onAddToFavorite = async (item: ISneakersItem) => {
   try {
     if (!item.isFavorite) {
       const updatedItem = {
-        productId: item.id,
+        item_id: item.id,
       };
 
       item.isFavorite = true;
@@ -64,7 +64,7 @@ const onAddToFavorite = async (item: ISneakersItem) => {
 
     item.favoriteId = null;
   } catch (error) {
-    console.log('App. Add to favorite', error);
+    console.log('Home. onAddToFavorite', error);
   }
 };
 
@@ -75,7 +75,7 @@ const getFavorites = async () => {
     );
 
     items.value = items.value.map((item) => {
-      const favorite = data.find((favoriteItem) => favoriteItem.productId === item.id);
+      const favorite = data.find((favoriteItem) => favoriteItem.item_id === item.id);
 
       if (!favorite) {
         return item;
@@ -88,7 +88,7 @@ const getFavorites = async () => {
       };
     });
   } catch (error) {
-    console.log('App', error);
+    console.log('Home. getFavorites', error);
   }
 };
 
@@ -116,7 +116,7 @@ const getSneakers = async () => {
       favoriteId: null,
     }));
   } catch (error) {
-    console.log('App', error);
+    console.log('Home. getSneakers', error);
   }
 };
 

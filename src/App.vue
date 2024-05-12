@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, provide, reactive, ref, watch } from 'vue';
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 
 import MainHeader from '@/components/MainHeader.vue';
@@ -15,6 +15,9 @@ const isDrawerOpen = ref<boolean>(false);
 const items = ref<ISneakersItem[]>([]);
 const itemsInCart = ref<ISneakersItem[]>([]);
 
+const totalCartPrice = computed(() => itemsInCart.value.reduce((acc, item) => acc + item.price, 0));
+const vatPrice = computed(() => Math.round(totalCartPrice.value * 0.05));
+
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
@@ -22,9 +25,11 @@ const filters = reactive({
 
 const onCloseDrawer = () => {
   isDrawerOpen.value = false;
+  document.documentElement.style.overflow = 'auto';
 };
 const onOpenDrawer = () => {
   isDrawerOpen.value = true;
+  document.documentElement.style.overflow = 'hidden';
 };
 
 const onSelectChange = (evt: Event) => {
@@ -161,10 +166,10 @@ provide('cart', {
 </script>
 
 <template>
-  <MainDrawer v-if="isDrawerOpen" />
+  <MainDrawer :total-cart-price="totalCartPrice" :vat-price="vatPrice" v-if="isDrawerOpen" />
 
   <div class="w-4/5 m-auto mt-14 bg-white rounded-xl shadow-xl">
-    <MainHeader @on-open-drawer="onOpenDrawer" />
+    <MainHeader :total-cart-price="totalCartPrice" @on-open-drawer="onOpenDrawer" />
 
     <div class="p-10">
       <div class="flex justify-between mb-8">

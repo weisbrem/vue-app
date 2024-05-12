@@ -4,6 +4,11 @@ import DrawerHead from './DrawerHead.vue';
 import CartElementList from './CartElementList.vue';
 
 const { onCloseDrawer } = inject('cart');
+
+defineProps({
+  totalCartPrice: Number,
+  vatPrice: Number,
+});
 </script>
 
 <template>
@@ -21,13 +26,13 @@ const { onCloseDrawer } = inject('cart');
       <div class="flex gap-2 mb-5">
         <span>Итого:</span>
         <div class="flex-1 border-b border-dashed mb-1" />
-        <span class="font-bold">1205 руб.</span>
+        <span class="font-bold">{{ totalCartPrice }} руб.</span>
       </div>
 
       <div class="flex gap-2 mb-2">
         <span>Налог 5%:</span>
         <div class="flex-1 border-b border-dashed mb-1" />
-        <span class="font-bold">1205 руб.</span>
+        <span class="font-bold">{{ vatPrice }} руб.</span>
       </div>
 
       <button

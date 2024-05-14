@@ -1,7 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { inject } from 'vue';
 
-const { onCloseDrawer } = inject('cart');
+import type { ICartProvide } from '@/types/provide.types';
+
+const { onCloseDrawer } = inject('cart') as ICartProvide;
 </script>
 
 <template>

@@ -1,8 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { inject } from 'vue';
-import CartElement from './CartElement.vue';
 
-const { itemsInCart, handleRemoveFromCart } = inject('cart');
+import CartElement from '@/components/CartElement.vue';
+
+import type { ICartProvide } from '@/types/provide.types';
+
+const { itemsInCart, handleRemoveFromCart } = inject('cart') as ICartProvide;
 </script>
 
 <template>

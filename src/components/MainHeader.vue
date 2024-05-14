@@ -1,5 +1,5 @@
-<script setup>
-import { AppRoutes } from '../constants/appRoutes';
+<script setup lang="ts">
+import { AppRoutes } from '@/constants/appRoutes';
 
 defineProps({
   totalCartPrice: Number,

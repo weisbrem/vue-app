@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   imageUrl: String,
   title: String,
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onFavoriteClick: Function,
-  onAddClick: Function,
+  onFavoriteClick: { type: [Function, null], required: true },
+  onAddClick: { type: [Function, null], required: true },
 });
 </script>
 

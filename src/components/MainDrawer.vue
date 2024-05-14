@@ -1,21 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { inject, ref, computed } from 'vue';
 import axios from 'axios';
 
-import DrawerHead from './DrawerHead.vue';
-import CartElementList from './CartElementList.vue';
-import InfoBlock from './InfoBlock.vue';
+import DrawerHead from '@/components/DrawerHead.vue';
+import CartElementList from '@/components/CartElementList.vue';
+import InfoBlock from '@/components/InfoBlock.vue';
 
-import { API_ROUTES } from '../constants/api';
+import type { ICartProvide } from '@/types/provide.types';
+
+import { API_ROUTES } from '@/constants/api';
 
 const { totalCartPrice } = defineProps({
   totalCartPrice: Number,
 });
-const { onCloseDrawer, itemsInCart } = inject('cart');
+const { onCloseDrawer, itemsInCart } = inject('cart') as ICartProvide;
 
-const isCreatingOrder = ref(false);
-const orderId = ref(null);
-const vatPrice = computed(() => Math.round(totalCartPrice * 0.05));
+const isCreatingOrder = ref<boolean>(false);
+const orderId = ref<number | null>(null);
+const vatPrice = computed(() => totalCartPrice && Math.round(totalCartPrice * 0.05));
 
 const onCreateOrder = async () => {
   try {

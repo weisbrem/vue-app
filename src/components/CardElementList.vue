@@ -1,12 +1,19 @@
-<script setup>
-import CardElement from './CardElement.vue';
+<script setup lang="ts">
+import CardElement from '@/components/CardElement.vue';
+
+import type { ISneakersItem } from '@/types/sneakers.types';
+
+interface IEmits {
+  (eventName: 'onAddToFavorite', newValue: ISneakersItem): void;
+  (eventName: 'onAddToCart', newValue: ISneakersItem): void;
+}
 
 const props = defineProps({
-  items: Array,
+  items: Array<ISneakersItem>,
   isFavorites: Boolean,
 });
 
-const emit = defineEmits(['onAddToFavorite', 'onAddToCart']);
+const emit = defineEmits<IEmits>();
 </script>
 
 <template>

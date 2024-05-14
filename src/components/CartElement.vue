@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   imageUrl: String,
   title: String,

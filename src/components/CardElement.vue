@@ -1,13 +1,16 @@
 <script setup lang="ts">
-defineProps({
-  imageUrl: String,
-  title: String,
-  price: Number,
-  isFavorite: Boolean,
-  isAdded: Boolean,
-  onFavoriteClick: { type: [Function, null], required: true },
-  onAddClick: { type: [Function, null], required: true },
-});
+interface IProps {
+  imageUrl: string;
+  title: string;
+  price: number;
+  isFavorite?: boolean;
+  isAdded?: boolean;
+  onFavoriteClick: (() => void) | null;
+  onAddClick: (() => void) | null;
+}
+
+const { imageUrl, title, price, isFavorite, isAdded, onFavoriteClick, onAddClick } =
+  defineProps<IProps>();
 </script>
 
 <template>
